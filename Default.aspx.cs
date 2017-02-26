@@ -12,57 +12,100 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-       
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(connStr))
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("asset_id", typeof(string));
+            dt.Columns.Add("type", typeof(string));
+            dt.Columns.Add("dop", typeof(string));
+            dt.Columns.Add("invoice", typeof(int));
+
+
+            con.Open();
+            SqlCommand cmd = new SqlCommand("spSelect", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+            {
+                while (rdr.Read())
+                {
+                    string assetId = rdr.GetString(rdr.GetOrdinal("asset_id"));
+                    string type = rdr.GetString(rdr.GetOrdinal("type"));
+                    string DOP = rdr.IsDBNull(rdr.GetOrdinal("dop")) ? "" : rdr.GetDateTime(rdr.GetOrdinal("dop")).ToString();
+                    string Invoice_ID = rdr.IsDBNull(rdr.GetOrdinal("invoice")) ? "" : rdr.GetInt32(rdr.GetOrdinal("invoice")).ToString();
+                    dt.Rows.Add(assetId, type, DOP, Invoice_ID);
+                }
+                rdr.Close();
+
+                gridView2.DataSource = dt;
+                gridView2.DataBind();
+                con.Close();
+            }
+
+        }
     }
     protected void Tab1_Click(object sender, EventArgs e)
     {
-       // gridView1.Visible = true;
+
         multiView1.ActiveViewIndex = 0;
     }
     protected void Tab2_Click(object sender, EventArgs e)
     {
-       //gridView2.Visible = true;
+       // gridView2.Visible = true;
         multiView1.ActiveViewIndex = 1;
     }
-    //private void PopulateAsset()
-    //{
-    //    string constr = ConfigurationManager.ConnectionStrings["s"].ConnectionString;
-    //    string sqlStatment = "SELECT * FROM inventory";
-    //    using (SqlConnection con = new SqlConnection(constr))
-    //    {
-    //        using (SqlCommand cmd = new SqlCommand(sqlStatment, con))
-    //        {
-    //            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-    //            {
-    //                DataSet ds = new DataSet();
-    //                da.Fill(ds);
-    //                this.gridView1.DataSource = ds;
-    //                this.gridView1.DataBind();
-    //            }
-    //        }
-    //    }
-    //}
-    //protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
-    //{
-  
-    //    this.gridView1.EditIndex = e.NewEditIndex;
-    //    Label lbl = (Label)gridView1.Rows[e.NewEditIndex].Cells[0].FindControl("asset_id");
-    //    string constr = ConfigurationManager.ConnectionStrings["constr"].ConnectionString;
-    //    string sqlStatment = "SELECT * FROM inventory WHERE asset_id=@asset_id";
-    //    using (SqlConnection con = new SqlConnection(constr))
-    //    {
-    //        using (SqlCommand cmd = new SqlCommand(sqlStatment, con))
-    //        {
-    //            cmd.Parameters.AddWithValue("@asset_id", Convert.ToInt32(lbl.Text));
-    //            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-    //            {
-    //                DataSet ds = new DataSet();
-    //                da.Fill(ds);
-    //                this.Txtinven.Text = ds.Tables[0].Rows[0]["asset_id"].ToString();
-    //                this.Txtinven1.Text = ds.Tables[0].Rows[0]["asset_name"].ToString();
-                    
-    //            }
-    //        }
-    //    }
-    //}
-}
+
+    protected void btnDist_Click(object sender, EventArgs e)
+    {
+        gridView1.Visible = true;
+    }
+    private void inven_search()
+    {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(connStr))
+        {
+            
+            con.Open();
+            string query = "select * from inventory where type like'" + Txtinven.Text + "%'";
+
+            SqlDataAdapter da = new SqlDataAdapter(query, con);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            gridView2.DataSource=ds;
+            gridView2.DataBind();
+            con.Close();
+        }
+    }
+    protected void btnInven_Click(object sender, EventArgs e)
+    {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(connStr))
+        {
+            con.Open();
+            string query = "select *  from inventory where type like'" + Txtinven.Text + "%'";
+            SqlCommand com = new SqlCommand(query, con);
+
+            SqlDataReader dr;
+            dr = com.ExecuteReader();
+
+
+            if (dr.HasRows)
+            {
+                dr.Read();
+
+                inven_search();
+                gridView2.Visible = true;
+
+                Txtinven.Text = "";
+                
+            }
+            else
+            {
+                gridView2.Visible = false;
+                Lbinven1.Visible = true;
+
+            }
+        }
+    }
+    
+    }
