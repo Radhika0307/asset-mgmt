@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true"  CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
 
 <!DOCTYPE html>
 
@@ -10,7 +10,7 @@
 </head>
 <body style="background-color: white;">
     <header style="background-color:whitesmoke;height:200px;width:1250px">
-    <img src="C:\Users\Radhika\Desktop\images.png" alt="logo" style="height:100px;width:200px" />
+    <img src="C:\Users\rkotthap\Desktop\logo.jpg" alt="logo" style="height:100px;width:200px" />
         <h1 align="center" style="font-family: Calibri">IT Asset Management </h1>
         </header>
     <hr />

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" MasterPageFile="~/MasterPage.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" MasterPageFile="~/MasterPage.master"  %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <p>
@@ -26,7 +26,7 @@
         <table style="background-color:lightgray;align-content:center" runat="server">
             <tr>
                 <td>
-                    <asp:HiddenField ID="hdnStatus" runat="server" />      
+                 
                       <asp:Label ID="lbDist" runat="server" Text="emp ID:">
         </asp:Label>
         <asp:TextBox ID="txtDist"  runat="server"></asp:TextBox>
@@ -37,15 +37,38 @@
 
             <tr>
                 <td>
-                    <asp:GridView ID="gridView1"  runat="server" AutoGenerateColumns="False" Visible="false" DataSourceID="SqlDataSource2">
+                    <asp:GridView ID="gridView1"  runat="server" AutoGenerateColumns="False" Visible="False" DataSourceID="SqlDataSource2" CellPadding="4" ForeColor="#333333" GridLines="None">
+                         <AlternatingRowStyle BackColor="White" />
                          <Columns>
-                             <asp:BoundField DataField="emp_id" HeaderText="Emp ID" ItemStyle-Width="150" />
-                             <asp:BoundField DataField="emp_name" HeaderText="name" ItemStyle-Width="150" />
-                              <asp:BoundField DataField="asset" HeaderText="Asset ID" ItemStyle-Width="150" />
-                             <asp:BoundField DataField="asset_name" HeaderText="Asset name" ItemStyle-Width="150" />
-                              <asp:BoundField DataField="dop" HeaderText="distributed date" ItemStyle-Width="150" />
-                             <asp:BoundField DataField="status" HeaderText="status" ItemStyle-Width="150" />
-                               </Columns>
+                             <asp:BoundField DataField="emp_id" HeaderText="Emp ID" ItemStyle-Width="150">
+                             <ItemStyle Width="150px" />
+                             </asp:BoundField>
+                             <asp:BoundField DataField="emp_name" HeaderText="name" ItemStyle-Width="150">
+                             <ItemStyle Width="150px" />
+                             </asp:BoundField>
+                             <asp:BoundField DataField="asset_id" HeaderText="Asset ID" ItemStyle-Width="150">
+                             <ItemStyle Width="150px" />
+                             </asp:BoundField>
+                             <asp:BoundField DataField="asset_name" HeaderText="Asset name" ItemStyle-Width="150">
+                             <ItemStyle Width="150px" />
+                             </asp:BoundField>
+                             <asp:BoundField DataField="dop" HeaderText="distributed date" ItemStyle-Width="150">
+                             <ItemStyle Width="150px" />
+                             </asp:BoundField>
+                             <asp:BoundField DataField="status" HeaderText="status" ItemStyle-Width="150">
+                             <ItemStyle Width="150px" />
+                             </asp:BoundField>
+                         </Columns>
+                         <EditRowStyle BackColor="#2461BF" />
+                         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                         <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                         <RowStyle BackColor="#EFF3FB" />
+                         <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                         <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                         <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                         <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                         <SortedDescendingHeaderStyle BackColor="#4870BE" />
                     </asp:GridView>
                     <asp:Label ID="LbDstn" runat="server" Visible="false"  Font-Bold="true"  ></asp:Label>
                     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
@@ -72,18 +95,33 @@
                 </tr>
             <tr>
                 <td>
-                    <asp:GridView ID="gridView2" Visible="False"  runat="server" >
+                    <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
+                    <asp:GridView ID="gridView2" Visible="False"  runat="server" CellPadding="4" ForeColor="#333333" GridLines="None"  >
+                        <AlternatingRowStyle BackColor="White" />
                         <Columns>
-                            <asp:ButtonField  ControlStyle-ForeColor="hdnStatus.Value"   >
-                            <ControlStyle BorderStyle="Groove" ForeColor="hdnStatus.Value" /> 
-                            <ItemStyle BackColor="hdnStatus.Value" />
-                            </asp:ButtonField>
+                            <asp:TemplateField HeaderText="status">
+                                <ItemTemplate>
+                                    <asp:Button ID="btnAllocate" runat="server" Visible="false"  ForeColor="Green" Text="Allocate" />
+                                    <asp:Button ID="btnDeallocate" runat="server" Visible="false" ForeColor="Red" Text="Deallocate" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
                         </Columns>
                        
+                        <EditRowStyle BackColor="#2461BF" />
+                        <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                        <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                        <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                        <RowStyle BackColor="#EFF3FB" />
+                        <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                        <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                        <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                        <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                        <SortedDescendingHeaderStyle BackColor="#4870BE" />
+                       
                     </asp:GridView>
-                   
                     <br />
-                     <asp:Label ID="Lbinven1" runat="server" Visible="false" Font-Bold="true"  Text="no results found!!!"></asp:Label>
+
+                     <asp:Label ID="Lbinven1" runat="server" Visible="false" Font-Bold="true"   Text="no results found!!!"></asp:Label>
                 </td>
             </tr>
             </table>
@@ -92,6 +130,9 @@
                  </td>
              </tr>
          </table>
+        <script type="text/javascript">
+            
+        </script>
        </center>
 </asp:Content>
 
@@ -102,5 +143,6 @@
             width: 482px;
         }
     </style>
+    <
 </asp:Content>
 
