@@ -12,7 +12,7 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string click;
+      
         string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (SqlConnection con = new SqlConnection(connStr))
         {
@@ -23,7 +23,7 @@ public partial class _Default : System.Web.UI.Page
             dt.Columns.Add("invoice_id", typeof(int));
             dt.Columns.Add("status", typeof(string));
 
-            //dt.Columns.Add("button", typeof(string));
+            
 
             con.Open();
             SqlCommand cmd = new SqlCommand("spSelect", con);
@@ -41,15 +41,7 @@ public partial class _Default : System.Web.UI.Page
                     string Invoice_ID = rdr.IsDBNull(rdr.GetOrdinal("Invoice_ID")) ? "" : rdr.GetInt32(rdr.GetOrdinal("Invoice_ID")).ToString();
                     string status =rdr.IsDBNull(rdr.GetOrdinal("status"))?"": rdr.GetString(rdr.GetOrdinal("status"));
                   
-                    if(status=="A")
-                    {
-                        click = "dellocate";
-
-                    }
-                    else
-                    {
-                        click = "allocate";
-                    }
+                    
                     dt.Rows.Add(assetId, type, DOP, Invoice_ID, status);
                     
 
@@ -169,37 +161,31 @@ public partial class _Default : System.Web.UI.Page
         Lbinven1.Visible = false;
         gridView2.Visible = true;
     }
-    //protected void bind()
-    //{
-    //    string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-    //    using (SqlConnection con = new SqlConnection(connStr))
-    //    {
 
-    //        con.Open();
-    //        string query ="select status from inventory JOIN employee ON[inventory].asset_id=[employee].asset_id ";
-
-    //        SqlDataAdapter da = new SqlDataAdapter(query, con);
-    //        DataSet ds = new DataSet();
-    //        da.Fill(ds);
-    //        gridView2.DataSource = ds;
-    //        gridView2.DataBind();
-    //        con.Close();
-    //    }
-    //}
-
-    //protected void gridView2_SelectedIndexChanged(object sender, EventArgs e)
-    //{
-    //    string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-    //    using (SqlConnection con = new SqlConnection(connStr))
-    //    {
-    //        con.Open();
-    //        string query = "select status from inventory JOIN employee ON[inventory].asset_id=[employee].asset_id";
-    //        SqlCommand com = new SqlCommand(query, con);
-    //        query = com.ExecuteReader().ToString();
-           
-          
-    //    }
-    //}
-  
    
+    protected void btnInsert_Click1(object sender, EventArgs e)
+    {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(connStr))
+        {
+
+            con.Open();
+            string query = "INSERT INTO employee(emp_id, emp_name, asset_id,asset_name,dop,status) VALUES(@emp_id, @emp_name, @asset_id,@asset_name,@dop,@status)";
+            SqlCommand com = new SqlCommand(query, con);
+            
+           
+         
+            com.Parameters.AddWithValue("@emp_id", Convert.ToInt32(txtInsert.Text));
+            com.Parameters.AddWithValue("@emp_name", Convert.ToString(TxtInsertName.Text));
+            com.Parameters.AddWithValue("@asset_id", hdassetid.Value);
+           com.Parameters.AddWithValue("@asset_name", hdassetname.Value);
+            com.Parameters.AddWithValue("@dop", Convert.ToDateTime(TxtInsertDate.Text));
+            com.Parameters.AddWithValue("@status", "A");
+            com.ExecuteNonQuery();
+            gridView2.DataBind();
+            con.Close();
+            LbSucess.Visible = true;
+        }
+        
+    }
 }
