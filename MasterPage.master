@@ -1,29 +1,74 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
 
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<html xmlns="http://www.w3.org/1999/xhtml" style="overflow-x:hidden">
 <head runat="server">
-    <title></title>
-    <asp:ContentPlaceHolder id="head" runat="server">
-    </asp:ContentPlaceHolder>
+   <title></title>
+   <asp:ContentPlaceHolder id="head" runat="server">
+   </asp:ContentPlaceHolder>
 </head>
+   <img src="dash-formation.png" alt="dash" align="right" />
 <body style="background-color: white;">
-    <header style="background-color:whitesmoke;height:200px;width:1250px">
-    <img src="C:\Users\rkotthap\Desktop\logo.jpg" alt="logo" style="height:100px;width:200px" />
-        <h1 align="center" style="font-family: Calibri">IT Asset Management </h1>
-        </header>
-    <hr />
-    <form  id="form1" runat="server">
-    <div >
+   <header style="background-color:whitesmoke;height:100px;width:100%" class="top">
+       <div class="content">
+   <img src="images.png" alt="logo" style="height:100px; width:237px" /><h1 align="center" style="font-family: Calibri">Welcome to Rockwell Collins </h1>
+           
+      
+           </div>
+       
 
-        <asp:ContentPlaceHolder  id="ContentPlaceHolder1" runat="server"/>
-                   
-    </div>
-    </form>
-    <hr />
-    <footer  style="background-color:whitesmoke;height:20px;width:1250px;align-content:stretch ">
-        <h5 align="center" style="font-family:Calibri; fit-position:slice"> Rockwell collins</h5>
-    </footer> 
+           </style>
+       </header>
+   <hr />
+    
+   <form  id="form1" runat="server">
+   <div >
+        <h2 align="center"  style="font-family: Calibri"><b>IT Asset Management</b> </h2>
+       <asp:ContentPlaceHolder  id="ContentPlaceHolder1" runat="server">
+                  
+           
+       </asp:ContentPlaceHolder>
+                  
+   </div>
+   </form>
+   <hr />
+    <footer  style="background-color:whitesmoke;height:30px;width:100%;align-content:stretch;"class="footer">
+       <h4 align="center" style="font-family:Calibri; fit-position:slice"> Rockwell collins</h4>
+   </footer> 
+  
+    <style>
+    content {
+   width: 100%;
+   padding: 20px;
+   overflow: hidden;
+}
+
+.content img {
+   margin-right: 15px;
+   float: left;}
+
+html, body, h1, h2, h3, h4, h5, h6, div {
+     padding: 0;
+     border: 0;
+     margin: 0;
+   }
+        .top {
+            padding: 0;
+            height: 170px;
+            background-color: #ef9a9a;
+            margin: 0px;
+        }
+        .footer {
+            position: fixed;
+            left: 0px;
+            bottom: 0px;
+            height: 30px;
+            width: 100%;
+            background: #999;
+            border-top: 5px solid black;
+        }
+
+        </style>
 </body>
 </html>

@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class _Default : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(connStr))
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("asset_id", typeof(string));
+            dt.Columns.Add("asset_name", typeof(string));
+            dt.Columns.Add("invoice_no", typeof(int));
+            dt.Columns.Add("DOP", typeof(string));
+
+
+            con.Open();
+            SqlCommand cmd = new SqlCommand("spinventory", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@asset_id", " ");
+            cmd.Parameters.AddWithValue("@asset_name", " ");
+            cmd.Parameters.AddWithValue("@invoice_no", "0");
+            cmd.Parameters.AddWithValue("@dop", " ");
+            using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+            {
+                while (rdr.Read())
+                {
+                    string assetId = rdr.GetString(rdr.GetOrdinal("asset_id"));
+                    string type = rdr.GetString(rdr.GetOrdinal("asset_name"));
+                    string Invoice_no = rdr.IsDBNull(rdr.GetOrdinal("invoice_no")) ? "" : rdr.GetInt32(rdr.GetOrdinal("invoice_no")).ToString();
+                    string DOP = rdr.IsDBNull(rdr.GetOrdinal("DOP")) ? "" : rdr.GetDateTime(rdr.GetOrdinal("DOP")).ToString();
+                    dt.Rows.Add(assetId, type, Invoice_no, DOP);
+                }
+                rdr.Close();
+
+                GridView2.DataSource = dt;
+                GridView2.DataBind();
+                con.Close();
+            }
+
+        }
+    }
+
+    protected void Tab1_Click(object sender, EventArgs e)
+    {
+
+        multiVw1.ActiveViewIndex = 1;
+    }
+    protected void Tab0_Click(object sender, EventArgs e)
+    {
+
+        multiVw1.ActiveViewIndex = 0;
+    }
+    protected void btnsearch_Click(object sender, EventArgs e)
+    {
+        if (txt1.Text.Trim() == string.Empty)
+        {
+            Label1.Visible = true;
+            Label1.Text = "enter a value!!";
+        }
+        else
+        {
+            Label1.Visible = false;
+            GridView1.Visible = true;
+            txt1.Text = "";
+        }
+    }
+    protected void LinkButton1_Click(object sender, EventArgs e)
+    {
+        
+            GridView1.Visible = true;
+    }
+    protected void LinkButton2_Click(object sender, EventArgs e)
+    {
+        GridView2.Visible = true;
+    }
+    
+    private void search2_inv()
+    {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(connStr))
+        {
+
+            con.Open();
+            string query = "select * from inventory where asset_name like'" + Txt2.Text + "%'";
+
+            SqlDataAdapter da = new SqlDataAdapter(query, con);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            GridView2.DataSource = ds;
+            GridView2.DataBind();
+            con.Close();
+        }
+    }
+    protected void linkbtn2_Click(object sender, EventArgs e)
+    {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(connStr))
+        {
+            con.Open();
+            string query = "select *  from inventory where asset_name like'" + Txt2.Text + "%'";
+            SqlCommand com = new SqlCommand(query, con);
+
+            SqlDataReader dr;
+            dr = com.ExecuteReader();
+
+            if (Txt2.Text.Trim() == string.Empty)
+            {
+                Lbinven1.Visible = true;
+                Lbinven1.Text = "enter a value!!";
+            }
+            else if (dr.HasRows)
+            {
+                dr.Read();
+
+                search2_inv();
+                GridView2.Visible = true;
+
+                Txt2.Text = "";
+
+            }
+            else
+            {
+                GridView2.Visible = false;
+                Lbinven1.Text = "no results found!!!";
+
+            }
+        }
+
+
+    }
+    
+}
